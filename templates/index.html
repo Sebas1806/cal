@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Cálculo Diferencial e Integral</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 0;
+        }
+        h1 {
+            font-size: 36px;
+            color: #333;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .section {
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .section h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 25px;
+        }
+        .form-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 25px;
+            margin-bottom: 25px;
+        }
+        .form-group label {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .form-group button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 14px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .form-group button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            font-size: 18px;
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f1f1f1;
+            text-align: center;
+        }
+        .instructions {
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        .instructions h2 {
+            font-size: 22px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .instructions ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .instructions li {
+            margin-bottom: 12px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de Cálculo Diferencial e Integral</h1>
+
+        <div class="section">
+            <h2>Derivadas</h2>
+            <form method="post">
+                <div class="form-group">
+                    <div>
+                        <label for="funcion_derivada">Función de x:</label>
+                        <input type="text" id="funcion_derivada" name="funcion_derivada" placeholder="Ejemplo: sin(x)^2 + ln(x)" required>
+                    </div>
+                    <div>
+                        <button type="submit" name="derivar">Calcular Derivada</button>
+                    </div>
+                </div>
+            </form>
+            <div class="result">
+                <p>{{ resultado_derivada|safe }}</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Integrales</h2>
+            <form method="post">
+                <div class="form-group">
+                    <div>
+                        <label for="funcion_integral">Función de x:</label>
+                        <input type="text" id="funcion_integral" name="funcion_integral" placeholder="Ejemplo: sin(x)^2 + ln(x)" required>
+                    </div>
+                    <div>
+                        <label for="a_integral">Intervalo desde (a):</label>
+                        <input type="number" id="a_integral" name="a_integral" step="any" placeholder="Opcional">
+                        <label for="b_integral">Intervalo hasta (b):</label>
+                        <input type="number" id="b_integral" name="b_integral" step="any" placeholder="Opcional">
+                        <button type="submit" name="integrar">Calcular Integral</button>
+                    </div>
+                </div>
+            </form>
+            <div class="result">
+                <p>{{ resultado_integral|safe }}</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Área entre Curvas</h2>
+            <form method="post">
+                <div class="form-group">
+                    <div>
+                        <label for="funcion1_area">Función de x:</label>
+                        <input type="text" id="funcion1_area" name="funcion1_area" placeholder="Ejemplo: sin(x)^2 + ln(x)" required>
+                    </div>
+                    <div>
+                        <label for="funcion2">Segunda función de x:</label>
+                        <input type="text" id="funcion2" name="funcion2" placeholder="Ejemplo: x^3">
+                        <label for="a">Intervalo desde (a):</label>
+                        <input type="number" id="a" name="a" step="any">
+                        <label for="b">Intervalo hasta (b):</label>
+                        <input type="number" id="b" name="b" step="any">
+                        <button type="submit" name="area">Calcular Área entre Curvas</button>
+                    </div>
+                </div>
+            </form>
+            <div class="result">
+                <p><strong>Resultado (Decimal):</strong> {{ resultado_decimal_area }}</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Volumen de Sólido de Revolución</h2>
+            <form method="post">
+                <div class="form-group">
+                    <div>
+                        <label for="funcion1_volumen">Función de x:</label>
+                        <input type="text" id="funcion1_volumen" name="funcion1_volumen" placeholder="Ejemplo: sin(x)^2" required>
+                    </div>
+                    <div>
+                        <label for="a_volumen">Intervalo desde (a):</label>
+                        <input type="number" id="a_volumen" name="a_volumen" step="any" required>
+                        <label for="b_volumen">Intervalo hasta (b):</label>
+                        <input type="number" id="b_volumen" name="b_volumen" step="any" required>
+                        <button type="submit" name="volumen">Calcular Volumen</button>
+                    </div>
+                </div>
+            </form>
+            <div class="result">
+                <p><strong>Resultado:</strong> {{ resultado_volumen }}</p>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h2>Instrucciones:</h2>
+            <ul>
+                <li>Usa <strong>^</strong> para potencias (se convierte a **).</li>
+                <li>Usa <strong>*</strong> para multiplicaciones (e.g., 3*x).</li>
+                <li>Funciones soportadas: sin(x), cos(x), tan(x), ln(x), etc.</li>
+                <li>Ejemplos: sin(x)^2, ln(x), e^x, (x^2 + 1)/(x^2 - 1), etc.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
