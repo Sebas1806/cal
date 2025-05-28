@@ -10,204 +10,240 @@
 </head>
 <body>
     <div class="container">
-        <h1>Calculadora Avanzada de Cálculo</h1>
+        <header class="main-header">
+            <h1>Calculadora Avanzada de Cálculo</h1>
+            <p class="subtitle">Herramienta matemática para cálculos complejos</p>
+        </header>
 
-        <div class="section">
-            <h2><i class="fas fa-calculator"></i> Derivadas</h2>
-            <div class="math-functions">
-                <div class="math-function" onclick="insertFunction('sin(x)')">sin(x)</div>
-                <div class="math-function" onclick="insertFunction('cos(x)')">cos(x)</div>
-                <div class="math-function" onclick="insertFunction('tan(x)')">tan(x)</div>
-                <div class="math-function" onclick="insertFunction('ln(x)')">ln(x)</div>
-                <div class="math-function" onclick="insertFunction('e^x')">e^x</div>
-                <div class="math-function" onclick="insertFunction('sqrt(x)')">√x</div>
-                <div class="math-function" onclick="insertFunction('x^2')">x²</div>
-                <div class="math-function" onclick="insertFunction('x^3')">x³</div>
-            </div>
-            <form method="post">
-                <div class="form-group">
-                    <div>
-                        <label for="funcion_derivada">Función de x:</label>
-                        <input type="text" id="funcion_derivada" name="funcion_derivada" placeholder="Ejemplo: sin(x)^2 + ln(x)" required>
-                    </div>
-                    <div>
-                        <button type="submit" name="derivar">
-                            <i class="fas fa-calculator"></i>
-                            Calcular Derivada
-                        </button>
-                    </div>
+        <div class="calculator-grid">
+            <!-- Sección de Derivadas -->
+            <section class="section">
+                <h2><i class="fas fa-calculator"></i> Derivadas</h2>
+                <div class="math-functions">
+                    <div class="math-function" onclick="insertFunction('sin(x)')">sin(x)</div>
+                    <div class="math-function" onclick="insertFunction('cos(x)')">cos(x)</div>
+                    <div class="math-function" onclick="insertFunction('tan(x)')">tan(x)</div>
+                    <div class="math-function" onclick="insertFunction('ln(x)')">ln(x)</div>
+                    <div class="math-function" onclick="insertFunction('e^x')">e^x</div>
+                    <div class="math-function" onclick="insertFunction('sqrt(x)')">√x</div>
+                    <div class="math-function" onclick="insertFunction('x²')">x²</div>
+                    <div class="math-function" onclick="insertFunction('x³')">x³</div>
                 </div>
-            </form>
-            <div class="result">
-                {% if error %}
-                <div class="error-message">{{ error }}</div>
-                {% endif %}
-                <p>{{ resultado_derivada|safe }}</p>
-            </div>
+                <form method="post" class="calculation-form">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label for="funcion_derivada">Función de x:</label>
+                            <input type="text" id="funcion_derivada" name="funcion_derivada" placeholder="Ejemplo: sin(x)² + ln(x)" required>
+                        </div>
+                        <div class="button-group">
+                            <button type="submit" name="derivar">
+                                <i class="fas fa-calculator"></i>
+                                Calcular Derivada
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="result">
+                    {% if error %}
+                    <div class="error-message">{{ error }}</div>
+                    {% endif %}
+                    <p>{{ resultado_derivada|safe }}</p>
+                </div>
+            </section>
+
+            <!-- Sección de Integrales -->
+            <section class="section">
+                <h2><i class="fas fa-integral"></i> Integrales</h2>
+                <div class="tabs">
+                    <div class="tab active" onclick="showTab('indefinida')">Integral Indefinida</div>
+                    <div class="tab" onclick="showTab('definida')">Integral Definida</div>
+                </div>
+                <form method="post" class="calculation-form">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label for="funcion_integral">Función de x:</label>
+                            <input type="text" id="funcion_integral" name="funcion_integral" placeholder="Ejemplo: sin(x)² + ln(x)" required>
+                        </div>
+                        <div id="integral-limits" class="limits-group" style="display: none;">
+                            <div class="limit-input">
+                                <label for="a_integral">Intervalo desde (a):</label>
+                                <input type="number" id="a_integral" name="a_integral" step="any" placeholder="Opcional">
+                            </div>
+                            <div class="limit-input">
+                                <label for="b_integral">Intervalo hasta (b):</label>
+                                <input type="number" id="b_integral" name="b_integral" step="any" placeholder="Opcional">
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button type="submit" name="integrar">
+                                <i class="fas fa-calculator"></i>
+                                Calcular Integral
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="result">
+                    <p>{{ resultado_integral|safe }}</p>
+                </div>
+            </section>
+
+            <!-- Sección de Área entre Curvas -->
+            <section class="section">
+                <h2><i class="fas fa-chart-area"></i> Área entre Curvas</h2>
+                <form method="post" class="calculation-form">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label for="funcion1_area">Primera función:</label>
+                            <input type="text" id="funcion1_area" name="funcion1_area" placeholder="Ejemplo: sin(x)²" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="funcion2">Segunda función:</label>
+                            <input type="text" id="funcion2" name="funcion2" placeholder="Ejemplo: x³" required>
+                        </div>
+                        <div class="limits-group">
+                            <div class="limit-input">
+                                <label for="a">Intervalo desde (a):</label>
+                                <input type="number" id="a" name="a" step="any" required>
+                            </div>
+                            <div class="limit-input">
+                                <label for="b">Intervalo hasta (b):</label>
+                                <input type="number" id="b" name="b" step="any" required>
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button type="submit" name="area">
+                                <i class="fas fa-calculator"></i>
+                                Calcular Área
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="result">
+                    <p><strong>Resultado:</strong> {{ resultado_decimal_area }} {{ unidad_area }}</p>
+                </div>
+            </section>
+
+            <!-- Sección de Volumen -->
+            <section class="section">
+                <h2><i class="fas fa-cube"></i> Volumen de Revolución</h2>
+                <form method="post" class="calculation-form">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label for="funcion1_volumen">Función de x:</label>
+                            <input type="text" id="funcion1_volumen" name="funcion1_volumen" placeholder="Ejemplo: sin(x)²" required>
+                        </div>
+                        <div class="limits-group">
+                            <div class="limit-input">
+                                <label for="a_volumen">Intervalo desde (a):</label>
+                                <input type="number" id="a_volumen" name="a_volumen" step="any" required>
+                            </div>
+                            <div class="limit-input">
+                                <label for="b_volumen">Intervalo hasta (b):</label>
+                                <input type="number" id="b_volumen" name="b_volumen" step="any" required>
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button type="submit" name="volumen">
+                                <i class="fas fa-calculator"></i>
+                                Calcular Volumen
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="result">
+                    <p><strong>Resultado:</strong> {{ resultado_volumen }}</p>
+                </div>
+            </section>
+
+            <!-- Sección de Límites -->
+            <section class="section">
+                <h2><i class="fas fa-infinity"></i> Límites</h2>
+                <form method="post" class="calculation-form">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label for="funcion_limites">Función de x:</label>
+                            <input type="text" id="funcion_limites" name="funcion_limites" placeholder="Ejemplo: sin(x)/x" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="punto">Punto de evaluación:</label>
+                            <input type="number" id="punto" name="punto" step="any" required>
+                        </div>
+                        <div class="button-group">
+                            <button type="submit" name="limites">
+                                <i class="fas fa-calculator"></i>
+                                Calcular Límite
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="result">
+                    <p>{{ resultado_limites|safe }}</p>
+                </div>
+            </section>
+
+            <!-- Sección de Series de Taylor -->
+            <section class="section">
+                <h2><i class="fas fa-sigma"></i> Series de Taylor</h2>
+                <form method="post" class="calculation-form">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label for="funcion_series">Función de x:</label>
+                            <input type="text" id="funcion_series" name="funcion_series" placeholder="Ejemplo: sin(x)" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="punto_series">Punto de expansión:</label>
+                            <input type="number" id="punto_series" name="punto_series" step="any" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="orden_series">Orden de la serie:</label>
+                            <input type="number" id="orden_series" name="orden_series" min="1" max="10" value="5" required>
+                        </div>
+                        <div class="button-group">
+                            <button type="submit" name="series">
+                                <i class="fas fa-calculator"></i>
+                                Calcular Serie
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="result">
+                    <p>{{ resultado_series|safe }}</p>
+                </div>
+            </section>
+
+            <!-- Sección de Matrices -->
+            <section class="section">
+                <h2><i class="fas fa-table"></i> Determinante de Matriz</h2>
+                <form method="post" class="calculation-form">
+                    <div class="form-group">
+                        <div class="input-group full-width">
+                            <label for="matriz">Matriz (una fila por línea, elementos separados por comas):</label>
+                            <textarea id="matriz" name="matriz" rows="4" placeholder="1,2,3&#10;4,5,6&#10;7,8,9" required></textarea>
+                        </div>
+                        <div class="button-group">
+                            <button type="submit" name="matriz">
+                                <i class="fas fa-calculator"></i>
+                                Calcular Determinante
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="result">
+                    <p>{{ resultado_matriz|safe }}</p>
+                </div>
+            </section>
         </div>
 
-        <div class="section">
-            <h2><i class="fas fa-integral"></i> Integrales</h2>
-            <div class="tabs">
-                <div class="tab active" onclick="showTab('indefinida')">Integral Indefinida</div>
-                <div class="tab" onclick="showTab('definida')">Integral Definida</div>
-            </div>
-            <form method="post">
-                <div class="form-group">
-                    <div>
-                        <label for="funcion_integral">Función de x:</label>
-                        <input type="text" id="funcion_integral" name="funcion_integral" placeholder="Ejemplo: sin(x)^2 + ln(x)" required>
-                    </div>
-                    <div id="integral-limits" style="display: none;">
-                        <label for="a_integral">Intervalo desde (a):</label>
-                        <input type="number" id="a_integral" name="a_integral" step="any" placeholder="Opcional">
-                        <label for="b_integral">Intervalo hasta (b):</label>
-                        <input type="number" id="b_integral" name="b_integral" step="any" placeholder="Opcional">
-                    </div>
-                    <div>
-                        <button type="submit" name="integrar">
-                            <i class="fas fa-calculator"></i>
-                            Calcular Integral
-                        </button>
-                    </div>
-                </div>
-            </form>
-            <div class="result">
-                <p>{{ resultado_integral|safe }}</p>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2><i class="fas fa-chart-area"></i> Área entre Curvas</h2>
-            <form method="post">
-                <div class="form-group">
-                    <div>
-                        <label for="funcion1_area">Función de x:</label>
-                        <input type="text" id="funcion1_area" name="funcion1_area" placeholder="Ejemplo: sin(x)^2 + ln(x)" required>
-                    </div>
-                    <div>
-                        <label for="funcion2">Segunda función de x:</label>
-                        <input type="text" id="funcion2" name="funcion2" placeholder="Ejemplo: x^3" required>
-                        <label for="a">Intervalo desde (a):</label>
-                        <input type="number" id="a" name="a" step="any" required>
-                        <label for="b">Intervalo hasta (b):</label>
-                        <input type="number" id="b" name="b" step="any" required>
-                        <button type="submit" name="area">
-                            <i class="fas fa-calculator"></i>
-                            Calcular Área
-                        </button>
-                    </div>
-                </div>
-            </form>
-            <div class="result">
-                <p><strong>Resultado:</strong> {{ resultado_decimal_area }} {{ unidad_area }}</p>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2><i class="fas fa-cube"></i> Volumen de Sólido de Revolución</h2>
-            <form method="post">
-                <div class="form-group">
-                    <div>
-                        <label for="funcion1_volumen">Función de x:</label>
-                        <input type="text" id="funcion1_volumen" name="funcion1_volumen" placeholder="Ejemplo: sin(x)^2" required>
-                    </div>
-                    <div>
-                        <label for="a_volumen">Intervalo desde (a):</label>
-                        <input type="number" id="a_volumen" name="a_volumen" step="any" required>
-                        <label for="b_volumen">Intervalo hasta (b):</label>
-                        <input type="number" id="b_volumen" name="b_volumen" step="any" required>
-                        <button type="submit" name="volumen">
-                            <i class="fas fa-calculator"></i>
-                            Calcular Volumen
-                        </button>
-                    </div>
-                </div>
-            </form>
-            <div class="result">
-                <p><strong>Resultado:</strong> {{ resultado_volumen }}</p>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2><i class="fas fa-infinity"></i> Límites</h2>
-            <form method="post">
-                <div class="form-group">
-                    <div>
-                        <label for="funcion_limites">Función de x:</label>
-                        <input type="text" id="funcion_limites" name="funcion_limites" placeholder="Ejemplo: sin(x)/x" required>
-                    </div>
-                    <div>
-                        <label for="punto">Punto de evaluación:</label>
-                        <input type="number" id="punto" name="punto" step="any" required>
-                        <button type="submit" name="limites">
-                            <i class="fas fa-calculator"></i>
-                            Calcular Límite
-                        </button>
-                    </div>
-                </div>
-            </form>
-            <div class="result">
-                <p>{{ resultado_limites|safe }}</p>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2><i class="fas fa-sigma"></i> Series de Taylor</h2>
-            <form method="post">
-                <div class="form-group">
-                    <div>
-                        <label for="funcion_series">Función de x:</label>
-                        <input type="text" id="funcion_series" name="funcion_series" placeholder="Ejemplo: sin(x)" required>
-                    </div>
-                    <div>
-                        <label for="punto_series">Punto de expansión:</label>
-                        <input type="number" id="punto_series" name="punto_series" step="any" required>
-                        <label for="orden_series">Orden de la serie:</label>
-                        <input type="number" id="orden_series" name="orden_series" min="1" max="10" value="5" required>
-                        <button type="submit" name="series">
-                            <i class="fas fa-calculator"></i>
-                            Calcular Serie
-                        </button>
-                    </div>
-                </div>
-            </form>
-            <div class="result">
-                <p>{{ resultado_series|safe }}</p>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2><i class="fas fa-table"></i> Determinante de Matriz</h2>
-            <form method="post">
-                <div class="form-group">
-                    <div>
-                        <label for="matriz">Matriz (una fila por línea, elementos separados por comas):</label>
-                        <textarea id="matriz" name="matriz" rows="4" placeholder="1,2,3&#10;4,5,6&#10;7,8,9" required></textarea>
-                    </div>
-                    <div>
-                        <button type="submit" name="matriz">
-                            <i class="fas fa-calculator"></i>
-                            Calcular Determinante
-                        </button>
-                    </div>
-                </div>
-            </form>
-            <div class="result">
-                <p>{{ resultado_matriz|safe }}</p>
-            </div>
-        </div>
-
-        <div class="instructions">
+        <footer class="instructions">
             <h2><i class="fas fa-info-circle"></i> Instrucciones</h2>
             <ul>
-                <li><i class="fas fa-check"></i> Usa <strong>^</strong> para potencias (se convierte a **)</li>
-                <li><i class="fas fa-check"></i> Usa <strong>*</strong> para multiplicaciones (e.g., 3*x)</li>
+                <li><i class="fas fa-check"></i> Usa <strong>^</strong> o superíndices (², ³) para potencias</li>
+                <li><i class="fas fa-check"></i> La multiplicación implícita está permitida (2x = 2*x)</li>
                 <li><i class="fas fa-check"></i> Funciones soportadas: sin(x), cos(x), tan(x), ln(x), etc.</li>
-                <li><i class="fas fa-check"></i> Ejemplos: sin(x)^2, ln(x), e^x, (x^2 + 1)/(x^2 - 1)</li>
+                <li><i class="fas fa-check"></i> Ejemplos: sin(x)², ln(x), e^x, (x² + 1)/(x² - 1)</li>
                 <li><i class="fas fa-check"></i> Para matrices: una fila por línea, elementos separados por comas</li>
             </ul>
-        </div>
+        </footer>
     </div>
 
     <script>
@@ -229,7 +265,7 @@
             
             const limits = document.getElementById('integral-limits');
             if (tabName === 'definida') {
-                limits.style.display = 'block';
+                limits.style.display = 'grid';
             } else {
                 limits.style.display = 'none';
             }
