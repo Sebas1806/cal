@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,8 +9,57 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-sun"></i>
+    </button>
+
+    <!-- History Toggle Button -->
+    <button class="history-toggle" onclick="toggleHistory()">
+        <i class="fas fa-history"></i>
+    </button>
+
+    <!-- History Panel -->
+    <div class="history-panel">
+        <h2><i class="fas fa-history"></i> Historial de Cálculos</h2>
+        <div id="history-list">
+            <!-- Los elementos del historial se añadirán dinámicamente -->
+        </div>
+    </div>
+
+    <!-- Tutorial Overlay -->
+    <div class="tutorial-overlay">
+        <div class="tutorial-content">
+            <button class="tutorial-close" onclick="closeTutorial()">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2>Bienvenido a la Calculadora Avanzada</h2>
+            <div class="tutorial-steps">
+                <p>1. Selecciona el tipo de cálculo que deseas realizar</p>
+                <p>2. Ingresa la función o expresión matemática</p>
+                <p>3. Para integrales, puedes elegir entre definida o indefinida</p>
+                <p>4. Usa los botones de funciones para insertar expresiones comunes</p>
+                <p>5. Guarda tus cálculos favoritos para uso futuro</p>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <h1>Calculadora Avanzada de Cálculo</h1>
+
+        <!-- Examples Section -->
+        <div class="examples-section">
+            <h2><i class="fas fa-lightbulb"></i> Ejemplos</h2>
+            <div class="example-item" onclick="loadExample('derivada', 'sin(x)^2')">
+                Derivada de sin²(x)
+            </div>
+            <div class="example-item" onclick="loadExample('integral', 'x^2')">
+                Integral de x²
+            </div>
+            <div class="example-item" onclick="loadExample('area', 'x^2', 'x')">
+                Área entre x² y x
+            </div>
+        </div>
 
         <div class="section">
             <h2><i class="fas fa-calculator"></i> Derivadas</h2>
@@ -39,6 +88,9 @@
                 </div>
             </form>
             <div class="result">
+                <button class="favorite-btn" onclick="toggleFavorite(this)">
+                    <i class="far fa-star"></i>
+                </button>
                 <p>{{ resultado_derivada|safe }}</p>
             </div>
         </div>
@@ -70,6 +122,9 @@
                 </div>
             </form>
             <div class="result">
+                <button class="favorite-btn" onclick="toggleFavorite(this)">
+                    <i class="far fa-star"></i>
+                </button>
                 <p>{{ resultado_integral|safe }}</p>
             </div>
         </div>
@@ -97,6 +152,9 @@
                 </div>
             </form>
             <div class="result">
+                <button class="favorite-btn" onclick="toggleFavorite(this)">
+                    <i class="far fa-star"></i>
+                </button>
                 <p><strong>Resultado:</strong> {{ resultado_decimal_area }} {{ unidad_area }}</p>
             </div>
         </div>
@@ -122,6 +180,9 @@
                 </div>
             </form>
             <div class="result">
+                <button class="favorite-btn" onclick="toggleFavorite(this)">
+                    <i class="far fa-star"></i>
+                </button>
                 <p><strong>Resultado:</strong> {{ resultado_volumen }}</p>
             </div>
         </div>
@@ -145,6 +206,9 @@
                 </div>
             </form>
             <div class="result">
+                <button class="favorite-btn" onclick="toggleFavorite(this)">
+                    <i class="far fa-star"></i>
+                </button>
                 <p>{{ resultado_limites|safe }}</p>
             </div>
         </div>
@@ -170,6 +234,9 @@
                 </div>
             </form>
             <div class="result">
+                <button class="favorite-btn" onclick="toggleFavorite(this)">
+                    <i class="far fa-star"></i>
+                </button>
                 <p>{{ resultado_series|safe }}</p>
             </div>
         </div>
@@ -191,7 +258,25 @@
                 </div>
             </form>
             <div class="result">
+                <button class="favorite-btn" onclick="toggleFavorite(this)">
+                    <i class="far fa-star"></i>
+                </button>
                 <p>{{ resultado_matriz|safe }}</p>
+            </div>
+        </div>
+
+        <div class="notes-section">
+            <textarea class="note-input" placeholder="Añade una nota a este cálculo..."></textarea>
+        </div>
+
+        <div class="comparison-section">
+            <div class="comparison-item">
+                <h3>Resultado Actual</h3>
+                <p id="current-result"></p>
+            </div>
+            <div class="comparison-item">
+                <h3>Resultado Anterior</h3>
+                <p id="previous-result"></p>
             </div>
         </div>
 
@@ -232,40 +317,85 @@
             }
         }
 
-        // Mostrar mensaje de error si existe
-        {% if error %}
-        alert("{{ error }}");
-        {% endif %}
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Update icon
+            const icon = document.querySelector('.theme-toggle i');
+            icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
 
-        // Animación suave al hacer scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
+        // History Panel
+        function toggleHistory() {
+            const panel = document.querySelector('.history-panel');
+            panel.classList.toggle('active');
+        }
 
-        // Efecto de brillo en los botones
-        document.querySelectorAll('button').forEach(button => {
-            button.addEventListener('mouseover', function() {
-                this.style.animation = 'shine 1s linear';
-            });
-            button.addEventListener('mouseout', function() {
-                this.style.animation = '';
-            });
-        });
+        // Tutorial
+        function showTutorial() {
+            const overlay = document.querySelector('.tutorial-overlay');
+            overlay.classList.add('active');
+        }
 
-        // Efecto de pulso en los resultados
-        document.querySelectorAll('.result').forEach(result => {
-            result.addEventListener('mouseover', function() {
-                this.style.animation = 'pulse 1s ease-in-out';
-            });
-            result.addEventListener('mouseout', function() {
-                this.style.animation = '';
-            });
-        });
+        function closeTutorial() {
+            const overlay = document.querySelector('.tutorial-overlay');
+            overlay.classList.remove('active');
+        }
+
+        // Favorites
+        function toggleFavorite(button) {
+            button.classList.toggle('active');
+            const icon = button.querySelector('i');
+            icon.className = button.classList.contains('active') ? 'fas fa-star' : 'far fa-star';
+        }
+
+        // Examples
+        function loadExample(type, func1, func2 = null) {
+            switch(type) {
+                case 'derivada':
+                    document.getElementById('funcion_derivada').value = func1;
+                    break;
+                case 'integral':
+                    document.getElementById('funcion_integral').value = func1;
+                    break;
+                case 'area':
+                    document.getElementById('funcion1_area').value = func1;
+                    document.getElementById('funcion2').value = func2;
+                    break;
+            }
+        }
+
+        // History Management
+        function addToHistory(operation, result) {
+            const historyList = document.getElementById('history-list');
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item';
+            historyItem.innerHTML = `
+                <div class="operation">${operation}</div>
+                <div class="result">${result}</div>
+            `;
+            historyList.insertBefore(historyItem, historyList.firstChild);
+        }
+
+        // Initialize theme from localStorage
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        const themeIcon = document.querySelector('.theme-toggle i');
+        themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+
+        // Show tutorial on first visit
+        if (!localStorage.getItem('tutorialShown')) {
+            showTutorial();
+            localStorage.setItem('tutorialShown', 'true');
+        }
+
+        // Existing functions...
+        // ... existing code ...
     </script>
 </body>
 </html>
