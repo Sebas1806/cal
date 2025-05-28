@@ -248,8 +248,26 @@ textarea:focus {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
 button {
-    background: var(--gradient-primary);
+    background: linear-gradient(
+        45deg,
+        var(--primary-color),
+        var(--secondary-color),
+        var(--primary-color)
+    );
+    background-size: 200% 200%;
     color: white;
     border: none;
     padding: var(--spacing-sm) var(--spacing-md);
@@ -266,6 +284,7 @@ button {
     box-shadow: var(--shadow-md);
     position: relative;
     overflow: hidden;
+    animation: gradientAnimation 3s ease infinite;
 }
 
 button::before {
@@ -287,7 +306,7 @@ button::before {
 button:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(108, 99, 255, 0.4);
-    background: var(--gradient-hover);
+    animation: gradientAnimation 1.5s ease infinite;
 }
 
 button:hover::before {
