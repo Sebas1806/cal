@@ -86,8 +86,8 @@
 
         .form-group {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
             margin-bottom: 25px;
         }
 
@@ -129,6 +129,9 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
         }
 
         .form-group button:hover {
@@ -170,6 +173,9 @@
         .instructions ul {
             list-style-type: none;
             padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
         }
 
         .instructions li {
@@ -179,11 +185,15 @@
             align-items: center;
             gap: 10px;
             transition: all 0.3s ease;
+            padding: 10px;
+            background-color: #3d3d3d;
+            border-radius: 8px;
         }
 
         .instructions li:hover {
             color: var(--text-color);
             transform: translateX(5px);
+            background-color: #4d4d4d;
         }
 
         .instructions li i {
@@ -194,6 +204,7 @@
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
+            justify-content: center;
         }
 
         .tab {
@@ -203,6 +214,8 @@
             cursor: pointer;
             transition: all 0.3s ease;
             border: 1px solid transparent;
+            min-width: 150px;
+            text-align: center;
         }
 
         .tab:hover {
@@ -216,7 +229,7 @@
 
         .math-functions {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 10px;
             margin-bottom: 20px;
         }
@@ -236,21 +249,6 @@
             transform: translateY(-2px);
         }
 
-        .plot-container {
-            margin-top: 20px;
-            padding: 20px;
-            background-color: #3d3d3d;
-            border-radius: 12px;
-            text-align: center;
-        }
-
-        .plot-container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
         @media (max-width: 768px) {
             .form-group {
                 grid-template-columns: 1fr;
@@ -266,6 +264,10 @@
 
             .section {
                 padding: 20px;
+            }
+
+            .instructions ul {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -329,11 +331,6 @@
             <div class="result">
                 <p>{{ resultado_derivada|safe }}</p>
             </div>
-            {% if grafica %}
-            <div class="plot-container">
-                <img src="data:image/png;base64,{{ grafica }}" alt="Gráfica de la función">
-            </div>
-            {% endif %}
         </div>
 
         <div class="section">
@@ -348,7 +345,7 @@
                         <label for="funcion_integral">Función de x:</label>
                         <input type="text" id="funcion_integral" name="funcion_integral" placeholder="Ejemplo: sin(x)^2 + ln(x)" required>
                     </div>
-                    <div id="integral-limits">
+                    <div id="integral-limits" style="display: none;">
                         <label for="a_integral">Intervalo desde (a):</label>
                         <input type="number" id="a_integral" name="a_integral" step="any" placeholder="Opcional">
                         <label for="b_integral">Intervalo hasta (b):</label>
@@ -365,11 +362,6 @@
             <div class="result">
                 <p>{{ resultado_integral|safe }}</p>
             </div>
-            {% if grafica %}
-            <div class="plot-container">
-                <img src="data:image/png;base64,{{ grafica }}" alt="Gráfica de la integral">
-            </div>
-            {% endif %}
         </div>
 
         <div class="section">
@@ -382,11 +374,11 @@
                     </div>
                     <div>
                         <label for="funcion2">Segunda función de x:</label>
-                        <input type="text" id="funcion2" name="funcion2" placeholder="Ejemplo: x^3">
+                        <input type="text" id="funcion2" name="funcion2" placeholder="Ejemplo: x^3" required>
                         <label for="a">Intervalo desde (a):</label>
-                        <input type="number" id="a" name="a" step="any">
+                        <input type="number" id="a" name="a" step="any" required>
                         <label for="b">Intervalo hasta (b):</label>
-                        <input type="number" id="b" name="b" step="any">
+                        <input type="number" id="b" name="b" step="any" required>
                         <button type="submit" name="area">
                             <i class="fas fa-calculator"></i>
                             Calcular Área
@@ -397,11 +389,6 @@
             <div class="result">
                 <p><strong>Resultado:</strong> {{ resultado_decimal_area }} {{ unidad_area }}</p>
             </div>
-            {% if grafica %}
-            <div class="plot-container">
-                <img src="data:image/png;base64,{{ grafica }}" alt="Gráfica del área entre curvas">
-            </div>
-            {% endif %}
         </div>
 
         <div class="section">
@@ -427,11 +414,6 @@
             <div class="result">
                 <p><strong>Resultado:</strong> {{ resultado_volumen }}</p>
             </div>
-            {% if grafica %}
-            <div class="plot-container">
-                <img src="data:image/png;base64,{{ grafica }}" alt="Gráfica del volumen de revolución">
-            </div>
-            {% endif %}
         </div>
 
         <div class="section">
@@ -455,11 +437,6 @@
             <div class="result">
                 <p>{{ resultado_limites|safe }}</p>
             </div>
-            {% if grafica %}
-            <div class="plot-container">
-                <img src="data:image/png;base64,{{ grafica }}" alt="Gráfica del límite">
-            </div>
-            {% endif %}
         </div>
 
         <div class="section">
@@ -485,11 +462,6 @@
             <div class="result">
                 <p>{{ resultado_series|safe }}</p>
             </div>
-            {% if grafica %}
-            <div class="plot-container">
-                <img src="data:image/png;base64,{{ grafica }}" alt="Gráfica de la serie de Taylor">
-            </div>
-            {% endif %}
         </div>
 
         <div class="section">
