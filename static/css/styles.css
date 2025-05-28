@@ -563,23 +563,11 @@ h1::after {
     cursor: pointer;
 }
 
-/* Favorites System */
-.favorite-btn {
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    cursor: pointer;
-    transition: var(--transition);
-    padding: 5px;
-}
-
-.favorite-btn:hover {
-    color: var(--accent-color);
-    transform: scale(1.1);
-}
-
+/* Eliminar estilos de favoritos */
+.favorite-btn,
+.favorite-btn:hover,
 .favorite-btn.active {
-    color: var(--accent-color);
+    display: none;
 }
 
 /* Examples Section */

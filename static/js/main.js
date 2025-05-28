@@ -24,74 +24,8 @@ function addToHistory(operation, result) {
     historyItem.innerHTML = `
         <div class="operation">${operation}</div>
         <div class="result">${result}</div>
-        <div class="history-actions">
-            <button class="favorite-btn" onclick="toggleFavorite(this, '${operation.id}')">
-                <i class="far fa-star"></i>
-            </button>
-            <button class="note-btn" onclick="showNoteInput(this, '${operation.id}')">
-                <i class="fas fa-sticky-note"></i>
-            </button>
-        </div>
     `;
     historyList.insertBefore(historyItem, historyList.firstChild);
-}
-
-// Favorites Management
-function toggleFavorite(button, operationId) {
-    button.classList.toggle('active');
-    const icon = button.querySelector('i');
-    icon.className = button.classList.contains('active') ? 'fas fa-star' : 'far fa-star';
-    
-    fetch('/favorites', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ operation_id: operationId })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.is_favorite) {
-            showNotification('Añadido a favoritos');
-        } else {
-            showNotification('Eliminado de favoritos');
-        }
-    });
-}
-
-// Notes Management
-function showNoteInput(button, operationId) {
-    const noteInput = document.createElement('textarea');
-    noteInput.className = 'note-input';
-    noteInput.placeholder = 'Añade una nota...';
-    
-    const saveButton = document.createElement('button');
-    saveButton.className = 'save-note-btn';
-    saveButton.textContent = 'Guardar';
-    saveButton.onclick = () => saveNote(operationId, noteInput.value);
-    
-    const noteContainer = document.createElement('div');
-    noteContainer.className = 'note-container';
-    noteContainer.appendChild(noteInput);
-    noteContainer.appendChild(saveButton);
-    
-    button.parentElement.appendChild(noteContainer);
-}
-
-function saveNote(operationId, note) {
-    fetch('/notes', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ operation_id: operationId, note: note })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showNotification('Nota guardada');
-        }
-    });
 }
 
 // Examples Management
