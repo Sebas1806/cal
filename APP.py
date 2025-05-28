@@ -1,10 +1,41 @@
 from flask import Flask, render_template, request, jsonify
 from sympy import symbols, diff, integrate, sympify, Abs, solve, Matrix, sin, cos, tan, exp, log, sqrt
+import re
 
 app = Flask(__name__)
 
 # Definir la variable simbólica
 x = symbols('x')
+
+def preprocess_expression(expr_str):
+    """Función para preprocesar la expresión matemática y hacerla más intuitiva."""
+    # Reemplazar superíndices numéricos por potencias
+    expr_str = re.sub(r'(\d+)²', r'\1^2', expr_str)
+    expr_str = re.sub(r'(\d+)³', r'\1^3', expr_str)
+    expr_str = re.sub(r'(\d+)⁴', r'\1^4', expr_str)
+    expr_str = re.sub(r'(\d+)⁵', r'\1^5', expr_str)
+    expr_str = re.sub(r'(\d+)⁶', r'\1^6', expr_str)
+    expr_str = re.sub(r'(\d+)⁷', r'\1^7', expr_str)
+    expr_str = re.sub(r'(\d+)⁸', r'\1^8', expr_str)
+    expr_str = re.sub(r'(\d+)⁹', r'\1^9', expr_str)
+    
+    # Reemplazar multiplicación implícita (2x -> 2*x)
+    expr_str = re.sub(r'(\d+)x', r'\1*x', expr_str)
+    expr_str = re.sub(r'x(\d+)', r'x*\1', expr_str)
+    expr_str = re.sub(r'\)(\d+)', r')*\1', expr_str)
+    expr_str = re.sub(r'(\d+)\(', r'\1*(', expr_str)
+    expr_str = re.sub(r'\)x', r')*x', expr_str)
+    expr_str = re.sub(r'x\(', r'x*(', expr_str)
+    
+    # Reemplazar funciones trigonométricas con multiplicación implícita
+    expr_str = re.sub(r'(\d+)sin', r'\1*sin', expr_str)
+    expr_str = re.sub(r'(\d+)cos', r'\1*cos', expr_str)
+    expr_str = re.sub(r'(\d+)tan', r'\1*tan', expr_str)
+    expr_str = re.sub(r'(\d+)ln', r'\1*ln', expr_str)
+    expr_str = re.sub(r'(\d+)exp', r'\1*exp', expr_str)
+    expr_str = re.sub(r'(\d+)sqrt', r'\1*sqrt', expr_str)
+    
+    return expr_str
 
 def format_result(result):
     """Función para formatear el resultado y reemplazar ** por ^."""
@@ -25,6 +56,8 @@ def format_area_result(result):
 def safe_sympify(expr_str):
     """Función segura para convertir string a expresión simbólica."""
     try:
+        # Preprocesar la expresión
+        expr_str = preprocess_expression(expr_str)
         # Reemplazar ^ por ** para potencias
         expr_str = expr_str.replace('^', '**')
         return sympify(expr_str)
