@@ -178,8 +178,9 @@ def index():
                 save_to_history('matriz', {'matriz': matriz_str}, det)
 
         except Exception as e:
+            error_message = str(e)
             return render_template('index.html', 
-                                error=f"Error en el cálculo: {str(e)}",
+                                error=error_message,
                                 resultado_derivada=resultado_derivada,
                                 resultado_integral=resultado_integral,
                                 resultado_decimal_area=resultado_decimal_area,

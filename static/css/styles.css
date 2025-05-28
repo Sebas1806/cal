@@ -665,4 +665,38 @@ h1::after {
     .history-toggle i {
         font-size: 20px;
     }
+}
+
+.error-message {
+    color: var(--accent-color);
+    background-color: rgba(255, 107, 107, 0.1);
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border: 1px solid var(--accent-color);
+}
+
+input.error {
+    border-color: var(--accent-color) !important;
+    background-color: rgba(255, 107, 107, 0.1) !important;
+}
+
+.notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--card-bg);
+    color: var(--text-color);
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    z-index: 1000;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.notification.show {
+    transform: translateY(0);
+    opacity: 1;
 } 

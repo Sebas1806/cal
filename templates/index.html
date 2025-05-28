@@ -73,7 +73,7 @@
                 <div class="math-function" onclick="insertFunction('x^2')">x²</div>
                 <div class="math-function" onclick="insertFunction('x^3')">x³</div>
             </div>
-            <form method="post">
+            <form method="post" onsubmit="return validateForm(this);">
                 <div class="form-group">
                     <div>
                         <label for="funcion_derivada">Función de x:</label>
@@ -88,6 +88,9 @@
                 </div>
             </form>
             <div class="result">
+                {% if error %}
+                <div class="error-message">{{ error }}</div>
+                {% endif %}
                 <p>{{ resultado_derivada|safe }}</p>
             </div>
         </div>
@@ -373,8 +376,31 @@
             localStorage.setItem('tutorialShown', 'true');
         }
 
-        // Existing functions...
-        // ... existing code ...
+        function validateForm(form) {
+            const inputs = form.querySelectorAll('input[required]');
+            let isValid = true;
+            
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    isValid = false;
+                    input.classList.add('error');
+                } else {
+                    input.classList.remove('error');
+                }
+            });
+            
+            if (!isValid) {
+                showNotification('Por favor, completa todos los campos requeridos');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        // Mostrar mensaje de error si existe
+        {% if error %}
+        showNotification('{{ error }}');
+        {% endif %}
     </script>
 </body>
 </html>
